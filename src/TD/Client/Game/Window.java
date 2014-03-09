@@ -12,7 +12,7 @@ import java.awt.*;
 public class Window extends JFrame {
 
     public static String title = "Nicholas Cage Defender";
-    public static Dimension size = new Dimension(640, 608);
+    public static Dimension size = new Dimension(640, 620);
     
     
     
@@ -28,7 +28,7 @@ public class Window extends JFrame {
     
     public void init() {
         setLayout(new GridLayout(1,1,0,0));
-        Canvas canvas = new Canvas();
+        Canvas canvas = new Canvas(this);
         add(canvas);
         setVisible(true);
         

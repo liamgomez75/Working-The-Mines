@@ -20,7 +20,7 @@ public class KeyHandler implements MouseMotionListener, MouseListener {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        Canvas.mse = new Point((e.getX()) + ((Window.size.width - Canvas.myWidth)/2), (e.getY()) + ((Window.size.height - (Canvas.myHeight)) - (Window.size.width - Canvas.myWidth)/2));
+        Canvas.mse = new Point((e.getX()) - ((Window.size.width - Canvas.myWidth)/2), (e.getY()) - ((Window.size.height - (Canvas.myHeight)) - (Window.size.width - Canvas.myWidth)/2));
     }
 
     @Override

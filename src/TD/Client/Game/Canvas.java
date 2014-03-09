@@ -21,11 +21,15 @@ public class Canvas extends JPanel implements Runnable {
     public static Room room;
     public static Image[] tileset_ground = new Image[100];
     public static Image[] tileset_air = new Image[100];
+    public static Image[] tileset_res = new Image[100];
     public static Save save;
     public static Point mse = new Point(0, 0);
     public static Store store;
     
-    public Canvas() {
+    public Canvas(Window window) {
+        window.addMouseListener(new KeyHandler());
+        window.addMouseMotionListener(new KeyHandler());
+        
         gameLoop.start();
     }
     
@@ -41,7 +45,12 @@ public class Canvas extends JPanel implements Runnable {
             tileset_air[i] = new ImageIcon("res/tileset_air.png").getImage();
             tileset_air[i] = createImage(new FilteredImageSource(tileset_air[i].getSource(), new CropImageFilter(0, 64*i, 64, 64)));
         }
+        tileset_res[0] = new ImageIcon("res/cell.png").getImage();
+        tileset_res[1] = new ImageIcon("res/heart.png").getImage();
+        tileset_res[2] = new ImageIcon("res/coin.png").getImage();
+        
         save.loadSave(new File("save/mission1.sav"));
+        
     }
     
     @Override
