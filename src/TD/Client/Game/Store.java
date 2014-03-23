@@ -20,6 +20,8 @@ public class Store {
     public static int cellSpace = 2;
     public static int awayFromRoom = 20;
     public static int iconSize = 20;
+    public static int iconSpace = 3;
+    public static int iconYSpace = 13;
     
     public Store() {
         define();
@@ -44,5 +46,9 @@ public class Store {
         }
         g.drawImage(Canvas.tileset_res[1] ,buttonHealth.x, buttonHealth.y, buttonHealth.width, buttonHealth.height, null);
         g.drawImage(Canvas.tileset_res[2],buttonMoney.x, buttonMoney.y, buttonMoney.width, buttonMoney.height, null);
+        g.setFont(new Font("Courier New", Font.BOLD, 14));
+        g.setColor(new Color(255, 255, 255));
+        g.drawString("" + Canvas.health, buttonHealth.x + buttonHealth.width + iconSpace, buttonHealth.y + iconYSpace);
+        g.drawString("" + Canvas.coinAmount, buttonMoney.x + buttonMoney.width + iconSpace, buttonMoney.y + iconYSpace);
     }
 }

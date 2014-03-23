@@ -15,4 +15,6 @@ public class Value {
     
     public static int airAir = -1;
     
+    public static int mobAir = -1;
+    public static int mobBee = 0;
 }
