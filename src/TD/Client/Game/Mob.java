@@ -27,7 +27,7 @@ public class Mob extends Rectangle {
         for (int y = 0; y < Canvas.room.block.length; y++) {
             if (Canvas.room.block[y][0].groundID == Value.groundRoad) {
                 setBounds(Canvas.room.block[y][0].x, Canvas.room.block[y][0].y, mobSize, mobSize);
-                xCoord = 0;
+                xCoord = -1;
                 yCoord = y;
             }
         }
@@ -56,21 +56,18 @@ public class Mob extends Rectangle {
             if (direction == right) {
                 xCoord += 1;
                 hasRight = true;
-                System.out.println("hasRight");
 
             } else if (direction == upward) {
                 yCoord -= 1;
                 hasUpward = true;
-                System.out.println("hasUpward");
             } else if (direction == downward) {
                 yCoord += 1;
                 hasDownward = true;
-                System.out.println("hasDownward");
             } else if (direction == left) {
                 xCoord -= 1;
                 hasLeft = true;
-                System.out.println("hasLeft");
             }
+            mobWalk = 0;
         }
         
     }
@@ -122,7 +119,6 @@ public class Mob extends Rectangle {
                 }
             } catch (Exception e) {}
         }
-        mobWalk = 0;
         hasUpward = false;
         hasDownward = false;
         hasLeft = false;
