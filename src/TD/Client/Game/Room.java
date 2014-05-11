@@ -28,7 +28,7 @@ public class Room {
         }
     }
     
-    public void physic() {
+    public void physics() {
         
     }
     

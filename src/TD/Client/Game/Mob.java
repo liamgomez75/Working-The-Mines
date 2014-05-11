@@ -36,7 +36,7 @@ public class Mob extends Rectangle {
     }
     public int walkFrame = 0, walkSpeed = 40;
 
-    public void physic() {
+    public void physics() {
         if (walkFrame >= walkSpeed) {
             move();
             fullTileCheck();
