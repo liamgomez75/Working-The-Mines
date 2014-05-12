@@ -27,7 +27,7 @@ public class Mob extends Rectangle {
         for (int y = 0; y < Canvas.room.block.length; y++) {
             if (Canvas.room.block[y][0].groundID == Value.groundRoad) {
                 setBounds(Canvas.room.block[y][0].x, Canvas.room.block[y][0].y, mobSize, mobSize);
-                xCoord = -1;
+                xCoord = 0;
                 yCoord = y;
             }
         }
@@ -57,6 +57,7 @@ public class Mob extends Rectangle {
                 xCoord += 1;
                 hasRight = true;
 
+
             } else if (direction == upward) {
                 yCoord -= 1;
                 hasUpward = true;
@@ -68,6 +69,7 @@ public class Mob extends Rectangle {
                 hasLeft = true;
             }
             mobWalk = 0;
+            
         }
         
     }
@@ -86,6 +88,8 @@ public class Mob extends Rectangle {
     }
 
     private void changeDirection() {
+        System.out.println("Hasdownward : " + hasDownward);
+        System.out.println("HasUpward : " + hasUpward);
         if (!hasDownward) { 
             try {
                 if (Canvas.room.block[yCoord + 1][xCoord].groundID == Value.groundRoad) {
@@ -95,27 +99,30 @@ public class Mob extends Rectangle {
         }
 
 
-        if (!hasUpward) {
+        if (hasUpward) {
             try {
                 if (Canvas.room.block[yCoord - 1][xCoord].groundID == Value.groundRoad) {
                     direction = upward;
                 }
             } catch (Exception e) {}
         }
-        if (!hasRight) {
+        if (hasRight) {
 
             try {
                 if (Canvas.room.block[yCoord][xCoord + 1].groundID == Value.groundRoad) {
                     direction = right;
+                    
+                    
                 }
             } catch (Exception e) {}
         }
 
-        if (!hasLeft) {
+        if (hasLeft) {
 
             try {
                 if (Canvas.room.block[yCoord][xCoord - 1].groundID == Value.groundRoad) {
                     direction = left;
+                    
                 }
             } catch (Exception e) {}
         }
