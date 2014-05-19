@@ -115,7 +115,7 @@ public class Canvas extends JPanel implements Runnable {
                 mobSpawner();
                 for(int i = 0; i < mobs.length; i++) {
                     if(mobs[i].inGame) {
-                        mobs[i].physic();
+                        mobs[i].physics();
                     }
                 }
             }
