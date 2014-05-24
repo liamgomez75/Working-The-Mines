@@ -31,6 +31,14 @@ public class Mob extends Rectangle {
         this.mobID = mobID;
         inGame = true;
     }
+    
+    public void deleteSelf() {
+        inGame = false;
+    }
+    
+    public void dealDamage() {
+        Canvas.health-=1;
+    }
 
     public void physics() {
         if (walkFrame >= walkSpeed) {
@@ -45,6 +53,12 @@ public class Mob extends Rectangle {
                     turnClockwise();
                 }   
             }
+            
+            if(Canvas.room.block[yCoord][xCoord].airID == Value.airCage ) {
+                deleteSelf();
+                dealDamage();
+            }
+            
             
 
             walkFrame = 0;
@@ -96,23 +110,26 @@ public class Mob extends Rectangle {
     }
 
     private boolean isDirectionClear() {
-        if (direction == downward) {
-            if (Canvas.room.block[yCoord + 1][xCoord].groundID != Value.groundRoad) {
-                return false;
-            }
-        } else if (direction == upward) {
-            if (Canvas.room.block[yCoord - 1][xCoord].groundID != Value.groundRoad) {
-                return false;
-            }
-        } else if (direction == right) {
-            if (Canvas.room.block[yCoord][xCoord + 1].groundID != Value.groundRoad) {
-                return false;
-            }
-        } else if (direction == left) {
-            if (Canvas.room.block[yCoord][xCoord - 1].groundID != Value.groundRoad) {
-                return false;
-            }
-        }
+        try {
+                if (direction == downward) {
+                    if (Canvas.room.block[yCoord + 1][xCoord].groundID != Value.groundRoad) {
+                        return false;
+                    }
+                } else if (direction == upward) {
+                    if (Canvas.room.block[yCoord - 1][xCoord].groundID != Value.groundRoad) {
+                        return false;
+                    }
+                } else if (direction == right) {
+                    if (Canvas.room.block[yCoord][xCoord + 1].groundID != Value.groundRoad) {
+                        return false;
+                    }
+                } else if (direction == left) {
+                    if (Canvas.room.block[yCoord][xCoord - 1].groundID != Value.groundRoad) {
+                        return false;
+                    }
+                }
+            } catch (Exception e) {}
+        
         return true;
     }
 

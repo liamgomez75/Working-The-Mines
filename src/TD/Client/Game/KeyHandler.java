@@ -30,7 +30,7 @@ public class KeyHandler implements MouseMotionListener, MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        
+        Canvas.store.click(e.getButton());
     }
 
     @Override

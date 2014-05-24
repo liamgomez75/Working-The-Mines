@@ -22,9 +22,34 @@ public class Store {
     public static int iconSize = 20;
     public static int iconSpace = 3;
     public static int iconYSpace = 13;
+    public static int heldID = -1;
+    public static int[] buttonID = {Value.airTowerLaser,Value.airAir,Value.airAir,Value.airAir,Value.airAir,Value.airAir,Value.airAir,Value.airTrash};
+    public static int itemBorder = 4;
+    public static int[] buttonPrice = {10,0,0,0,0,0,0,0};
+    
+    public static boolean holdingItem = false;
     
     public Store() {
         define();
+    }
+    
+    public void click(int mouseButton) {
+        if(mouseButton == 1) {
+            for(int i = 0;i < button.length;i++) {
+                if(button[i].contains(Canvas.mse)) {
+                    if(buttonID[i] != Value.airAir) {
+                        if(buttonID[i] == Value.airTrash) { //Deletes the current item held.
+                            holdingItem = false;
+                        } else {
+                            heldID= buttonID[i];
+                            holdingItem = true;
+                        }
+                    }
+                    
+                    
+                }
+            }
+        }
     }
     
     public void define() {
@@ -43,6 +68,15 @@ public class Store {
             }
             
             g.drawImage(Canvas.tileset_res[0] ,button[i].x, button[i].y, button[i].width, button[i].height, null);
+            if(buttonID[i] != Value.airAir) 
+                g.drawImage(Canvas.tileset_air[buttonID[i]],button[i].x + itemBorder, button[i].y + itemBorder, button[i].width - (itemBorder*2), button[i].height-(itemBorder*2), null);
+            if(buttonPrice[i] > 0) {
+                g.setColor(new Color(255,255,255));
+                g.setFont(new Font("Courier New", Font.BOLD,14));
+                g.drawString("$" + buttonPrice[i],button[i].x + itemBorder,button[i].y + itemBorder + 10);
+                
+            }
+                
         }
         g.drawImage(Canvas.tileset_res[1] ,buttonHealth.x, buttonHealth.y, buttonHealth.width, buttonHealth.height, null);
         g.drawImage(Canvas.tileset_res[2],buttonMoney.x, buttonMoney.y, buttonMoney.width, buttonMoney.height, null);
@@ -50,5 +84,9 @@ public class Store {
         g.setColor(new Color(255, 255, 255));
         g.drawString("" + Canvas.health, buttonHealth.x + buttonHealth.width + iconSpace, buttonHealth.y + iconYSpace);
         g.drawString("" + Canvas.coinAmount, buttonMoney.x + buttonMoney.width + iconSpace, buttonMoney.y + iconYSpace);
+        
+        if(holdingItem) {
+            g.drawImage(Canvas.tileset_air[heldID], Canvas.mse.x - ((button[0].width - (itemBorder*2))/2) + itemBorder, Canvas.mse.y - ((button[0].height - (itemBorder*2))/2) + itemBorder, button[0].width - (itemBorder*2), button[0].height-(itemBorder*2), null);
+        }
     }
 }

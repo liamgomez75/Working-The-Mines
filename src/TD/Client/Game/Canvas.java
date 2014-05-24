@@ -7,18 +7,18 @@ package TD.Client.Game;
  */
 
 import java.awt.*;
+import java.awt.image.*;
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
-import java.awt.image.*;
-import java.io.*;
         
 public class Canvas extends JPanel implements Runnable {
     
     public Thread gameLoop = new Thread(this);
     public static int myWidth, myHeight;
     public static int coinAmount = 10;
-    public static int health = 100;
+    public static int health = 1;
     public static boolean isFirst = true;
     public static Room room;
     public static Image[] tileset_ground = new Image[100];
@@ -29,6 +29,8 @@ public class Canvas extends JPanel implements Runnable {
     public static Point mse = new Point(0, 0);
     public static Store store;
     public static Mob[] mobs = new Mob[100];
+    public static boolean cutscene = false;
+    
     
     public Canvas(Window window) {
         window.addMouseListener(new KeyHandler());
@@ -88,6 +90,19 @@ public class Canvas extends JPanel implements Runnable {
         }
         
         store.draw(g); //Draws the store.
+        
+        if(health < 1) {
+            g.setColor(new Color(0, 0, 0));
+            g.fillRect(0, 0, myWidth, myHeight);
+            g.setColor(new Color(255,255,255));
+            g.setFont(new Font("Courier New", Font.BOLD,36));
+            g.drawString("GAME OVER",220 ,300 );
+            try {
+                if(!cutscene) {
+                    cutscene = true;
+                } 
+            } catch(Exception e) {}
+        }
     }
     
     public int spawnTime = 2500, spawnFrame= 0;
@@ -110,7 +125,7 @@ public class Canvas extends JPanel implements Runnable {
     @Override
     public void run() {
         while(true){
-            if(!isFirst) {
+            if(!isFirst && health > 0) {
                 room.physics();
                 mobSpawner();
                 for(int i = 0; i < mobs.length; i++) {
@@ -127,5 +142,6 @@ public class Canvas extends JPanel implements Runnable {
             }
         }
     }
+    
     
 }
