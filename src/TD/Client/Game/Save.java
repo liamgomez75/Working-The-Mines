@@ -17,6 +17,7 @@ public class Save {
             Scanner loadScanner = new Scanner(loadPath);
             
             while(loadScanner.hasNext()) {
+                Canvas.killsToWin = loadScanner.nextInt();
                 for(int y = 0; y < Canvas.room.block.length; y++) {
                     for(int x = 0; x < Canvas.room.block[0].length; x++) {
                         Canvas.room.block[y][x].groundID = loadScanner.nextInt();
