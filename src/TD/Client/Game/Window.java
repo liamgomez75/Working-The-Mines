@@ -13,6 +13,7 @@ public class Window extends JFrame {
 
     public static String title = "Nicholas Cage Defender";
     public static Dimension size = new Dimension(640, 620);
+    public static boolean gameStarted =false;
     
     
     
@@ -28,8 +29,9 @@ public class Window extends JFrame {
     
     public void init() {
         setLayout(new GridLayout(1,1,0,0));
-        Canvas canvas = new Canvas(this);
-        add(canvas);
+            Canvas canvas = new Canvas(this);
+            add(canvas);
+        
         setVisible(true);
         
         
