@@ -9,6 +9,8 @@ import java.awt.*;
 public class Mob extends Rectangle {
 
     public int xCoord, yCoord;
+    public int health;
+    public int healthSpace = 3, healthHeight = 6;
     public int mobSize = 64;
     public int mobWalk = 0;
     public int upward = 0, downward = 1, right = 2, left = 3;
@@ -29,11 +31,18 @@ public class Mob extends Rectangle {
             }
         }
         this.mobID = mobID;
+        this.health = mobSize;
         inGame = true;
+        
     }
     
     public void deleteSelf() {
         inGame = false;
+        direction = right;
+        mobWalk = 0;
+        if(health<=0) {
+            Canvas.room.block[0][0].getLoot(mobID);
+        }
     }
     
     public void dealDamage() {
@@ -144,8 +153,38 @@ public class Mob extends Rectangle {
             direction = upward;
         }
     }
+    
+    public void takeDamage(int amount) {
+        health -= amount;
+        checkDeath();
+    }
+    
+    public void checkDeath() {
+        if(health <=0) {
+            deleteSelf();
+        }
+            
+    }
+    
+    public boolean isDead() {
+        if(inGame) {
+            return false;
+        }else{
+            return true;
+        }
+    }
 
     public void draw(Graphics g) {
         g.drawImage(Canvas.tileset_mob[mobID], x, y, width, height, null);
+        
+        //health bar
+        g.setColor(new Color(200,50,50));
+        g.fillRect(x, y - (healthSpace + healthHeight), width, healthHeight);
+
+        g.setColor(new Color(50,180,50));
+        g.fillRect(x, y - (healthSpace + healthHeight), health, healthHeight);
+        
+        g.setColor(new Color(0,0,0));
+        g.drawRect(x, y - (healthSpace + healthHeight), health-1, healthHeight-1);
     }
 }
