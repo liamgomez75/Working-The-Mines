@@ -20,4 +20,5 @@ public class Value {
     
     public static int mobAir = -1;
     public static int mobBee = 0;
+    public static int[] loot = {5};
 }
