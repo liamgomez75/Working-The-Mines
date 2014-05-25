@@ -18,7 +18,8 @@ public class Canvas extends JPanel implements Runnable {
     public Thread gameLoop = new Thread(this);
     public static int myWidth, myHeight;
     public static int coinAmount = 10;
-    public static int health = 1;
+    public static int health = 3;
+    public static int kills = 0, killsToWin = 0, level = 1, maxLevel = 3;
     public static boolean isFirst = true;
     public static Room room;
     public static Image[] tileset_ground = new Image[100];
@@ -29,7 +30,9 @@ public class Canvas extends JPanel implements Runnable {
     public static Point mse = new Point(0, 0);
     public static Store store;
     public static Mob[] mobs = new Mob[100];
-    public static boolean cutscene = false;
+    public static boolean isDebug = false;
+    public static boolean hasWon = false;
+    public static int winFrame = 0, winTime = 4000;
     
     
     public Canvas(Window window) {
@@ -39,10 +42,22 @@ public class Canvas extends JPanel implements Runnable {
         gameLoop.start();
     }
     
+    public static void hasWon() {
+        if(kills >= killsToWin) {
+            hasWon = true;
+            kills = 0;
+            coinAmount = 10;
+            health = 3;
+        } else {
+            hasWon = false;
+        }
+    }
+    
     public void define() {
         save = new Save();
         room = new Room();
         store = new Store();
+        coinAmount = 10;
         
         
         
@@ -59,7 +74,7 @@ public class Canvas extends JPanel implements Runnable {
         tileset_res[2] = new ImageIcon("res/coin.png").getImage();
         tileset_mob[0] = new ImageIcon("res/mob.png").getImage();
         
-        save.loadSave(new File("save/mission1.sav"));
+        save.loadSave(new File("save/mission" + level + ".sav"));
         
         for(int i = 0;i< mobs.length;i++) {
             mobs[i] = new Mob();
@@ -97,11 +112,17 @@ public class Canvas extends JPanel implements Runnable {
             g.setColor(new Color(255,255,255));
             g.setFont(new Font("Courier New", Font.BOLD,36));
             g.drawString("GAME OVER",220 ,300 );
-            try {
-                if(!cutscene) {
-                    cutscene = true;
-                } 
-            } catch(Exception e) {}
+        }
+        if(hasWon) {
+            g.setColor(new Color(255,255,255));
+            g.fillRect(0,0,getWidth(),getHeight());
+            g.setColor(new Color(0,0,0));
+            g.setFont(new Font("Courier New", Font.BOLD,14));
+            if(level == maxLevel) {
+                g.drawString("YOU WIN!",220 ,300 );
+            } else {
+                g.drawString("LOADING NEXT LEVEL...",215 ,300 );
+            }
         }
     }
     
@@ -125,7 +146,7 @@ public class Canvas extends JPanel implements Runnable {
     @Override
     public void run() {
         while(true){
-            if(!isFirst && health > 0) {
+            if(!isFirst && health > 0 && !hasWon) {
                 room.physics();
                 mobSpawner();
                 for(int i = 0; i < mobs.length; i++) {
@@ -133,7 +154,24 @@ public class Canvas extends JPanel implements Runnable {
                         mobs[i].physics();
                     }
                 }
+            } else {
+                if(hasWon) {
+                    if(winFrame >= winTime) {
+                        if(level == maxLevel) {
+                            System.exit(0);
+                        } else {
+                            level += 1;
+                            winFrame = 0;
+                            define();
+                            hasWon = false;
+                        }
+                        
+                    } else {
+                        winFrame += 1;
+                    }
+                }
             }
+            
             repaint();
             try {
                 gameLoop.sleep(1);
