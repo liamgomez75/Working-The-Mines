@@ -22,38 +22,47 @@ public class Mob extends Rectangle {
     public Mob() {
     }
 
+    
+    /* This method iterates through every block on the first row of the map
+    * and spawns the mob on the first block with the groundID of groundRoad. 
+    */
     public void spawnMob(int mobID) {
         for (int y = 0; y < Canvas.room.block.length; y++) {
             if (Canvas.room.block[y][0].groundID == Value.groundRoad) {
                 setBounds(Canvas.room.block[y][0].x, Canvas.room.block[y][0].y, mobSize, mobSize);
-                xCoord = 0;
+                xCoord = 0;// xCoord and yCoord are the coordinates of the tiles while x and y are the pixel coordinates
                 yCoord = y;
             }
         }
         this.mobID = mobID;
-        this.health = mobSize;
+        this.health = mobSize;// The health is based on how many pixels there are in the width of the mob's image.
         inGame = true;
         
     }
     
+    // This method is used to remove the mob from the game.
     public void deleteSelf() {
         inGame = false;
         direction = right;
         mobWalk = 0;
-        if(health<=0) {
-            Canvas.room.block[0][0].getLoot(mobID);
+        if(health<=0) { //This is to make sure that the mob was killed by the player and not removed by touching the end goal.
+            Canvas.room.block[0][0].getLoot(mobID);//Assigns the player a reward for killing the mob.
         }
     }
     
+    //This method deals damage and takes away one of the players lives.
     public void dealDamage() {
         Canvas.health-=1;
     }
 
+    //This method handles all of the movement and actions of the mob.
     public void physics() {
+        //walkFrame and walkSpeed are used to set the speed of how often the mob will move.
         if (walkFrame >= walkSpeed) {
             move();
             fullTileCheck();
 
+            //This portion of the method handles the direction changes of the mob if it has reached a turn.
             final int oppositeDirection = getOppositeDirection(direction);
             for (int turnsMade = 0; turnsMade < 4; turnsMade++) {
                 if (isDirectionClear() && ((turnsMade == 0) || (direction != oppositeDirection))) {
@@ -64,18 +73,19 @@ public class Mob extends Rectangle {
             }
             
             if(Canvas.room.block[yCoord][xCoord].airID == Value.airCage ) {
-                deleteSelf();
-                dealDamage();
+                deleteSelf();//If the mob has reached the end goal it will remove 
+                dealDamage();//itself from the game and deal 1 damage to the players lives.
             }
             
             
 
-            walkFrame = 0;
+            walkFrame = 0; //walkFrame is reset to 0 everytime the mob moves.
         } else {
             walkFrame += 1;
         }
     }
 
+    //this method moves the mob by either increasing or decreasing its pixel position on the map.
     private void move() {
         if (direction == right) {
             x += 1;
@@ -86,13 +96,13 @@ public class Mob extends Rectangle {
         } else if (direction == left) {
             x -= 1;
         }
-        mobWalk += 1;
+        mobWalk += 1;//mobWalk is used to show how many pixels the mob has traveled.
     }
 
     private void fullTileCheck() {
-        if (mobWalk == Canvas.room.blockSize) {
-            if (direction == right) {
-                xCoord += 1;
+        if (mobWalk == Canvas.room.blockSize) { //if the amount of pixels is the same as the block size
+            if (direction == right) {// then the mob will have moved one full block.
+                xCoord += 1; //If the mob has moved a full tile it will increment or decrement either the xCoord or yCoord based on the direction it is moving.
             } else if (direction == upward) {
                 yCoord -= 1;
             } else if (direction == downward) {
@@ -104,6 +114,7 @@ public class Mob extends Rectangle {
         }
     }
 
+    //This method is used to get the opposite direction that the mob is traveling in.
     private int getOppositeDirection(int direction) {
         if (direction == upward) {
             return downward;
@@ -114,10 +125,11 @@ public class Mob extends Rectangle {
         } else if (direction == right) {
             return left;
         } else {
-            return 4;
+            return 4; // 4 is an unused direction and will never be returned.
         }
     }
 
+    //This method is used to check if the blocks around the mob are a part of the road path.
     private boolean isDirectionClear() {
         try {
                 if (direction == downward) {
