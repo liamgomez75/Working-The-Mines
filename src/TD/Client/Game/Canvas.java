@@ -36,12 +36,15 @@ public class Canvas extends JPanel implements Runnable {
     
     
     public Canvas(Window window) {
-        window.addMouseListener(new KeyHandler());
+        window.addMouseListener(new KeyHandler()); // Adds listeners to listen for mouse and keyboard input.
         window.addMouseMotionListener(new KeyHandler());
         
-        gameLoop.start();
+        gameLoop.start(); // Starts the loop of the game.
     }
     
+   /* This method checks if the player has beaten the level.
+    * If the player has won all of his values are reset in preparation for the next level.
+    */
     public static void hasWon() {
         if(kills >= killsToWin) {
             hasWon = true;
@@ -53,6 +56,7 @@ public class Canvas extends JPanel implements Runnable {
         }
     }
     
+    //This method is responsible for initializing everything from images to the map.
     public void define() {
         save = new Save();
         room = new Room();
@@ -61,11 +65,11 @@ public class Canvas extends JPanel implements Runnable {
         
         
         
-        for(int i = 0; i < tileset_ground.length; i++) {
+        for(int i = 0; i < tileset_ground.length; i++) { // Initializes the ground images
             tileset_ground[i] = new ImageIcon("res/tileset_ground.png").getImage();
-            tileset_ground[i] = createImage(new FilteredImageSource(tileset_ground[i].getSource(), new CropImageFilter(0, 64*i, 64, 64)));
+            tileset_ground[i] = createImage(new FilteredImageSource(tileset_ground[i].getSource(), new CropImageFilter(0, 64*i, 64, 64))); // This is used to get an image that is in a tileset.
         }
-        for(int i = 0; i < tileset_air.length; i++) {
+        for(int i = 0; i < tileset_air.length; i++) { // Initializes the air images.
             tileset_air[i] = new ImageIcon("res/tileset_air.png").getImage();
             tileset_air[i] = createImage(new FilteredImageSource(tileset_air[i].getSource(), new CropImageFilter(0, 64*i, 64, 64)));
         }
@@ -74,17 +78,19 @@ public class Canvas extends JPanel implements Runnable {
         tileset_res[2] = new ImageIcon("res/coin.png").getImage();
         tileset_mob[0] = new ImageIcon("res/mob.png").getImage();
         
-        save.loadSave(new File("save/mission" + level + ".sav"));
+        save.loadSave(new File("save/mission" + level + ".sav")); // Loads the level from the save file.
         
+        //Initializes the mobs for the map.
         for(int i = 0;i< mobs.length;i++) {
             mobs[i] = new Mob();
         }
         
     }
     
+    //This method handles all of the graphics for painting the entire screen.
     @Override
     public void paintComponent(Graphics g) {
-        if(isFirst) {
+        if(isFirst) { // Initializes the width and height values and defines everything.
             myWidth = getWidth();
             myHeight = getHeight();
             define();
@@ -99,7 +105,7 @@ public class Canvas extends JPanel implements Runnable {
         room.draw(g); //Draws the room.
         
         for(int i = 0; i <mobs.length; i++) {
-            if(mobs[i].inGame) {
+            if(mobs[i].inGame) { // Draws the mob if it is in the game.
                 mobs[i].draw(g);
             }
         }
@@ -111,7 +117,7 @@ public class Canvas extends JPanel implements Runnable {
             g.fillRect(0, 0, myWidth, myHeight);
             g.setColor(new Color(255,255,255));
             g.setFont(new Font("Courier New", Font.BOLD,36));
-            g.drawString("GAME OVER",220 ,300 );
+            g.drawString("GAME OVER",220 ,300 ); // Draws the game over screen.
         }
         if(hasWon) {
             g.setColor(new Color(255,255,255));
@@ -119,20 +125,21 @@ public class Canvas extends JPanel implements Runnable {
             g.setColor(new Color(0,0,0));
             g.setFont(new Font("Courier New", Font.BOLD,14));
             if(level == maxLevel) {
-                g.drawString("YOU WIN!",220 ,300 );
+                g.drawString("YOU WIN!",getWidth()/2 ,getHeight()/2 ); // Draws the win screen if there are no additional levels.
             } else {
-                g.drawString("LOADING NEXT LEVEL...",215 ,300 );
+                g.drawString("LOADING NEXT LEVEL...",getWidth()/2 ,getHeight()/2 ); // Draws the loading screen if there is another level.
             }
         }
     }
     
     public int spawnTime = 2500, spawnFrame= 0;
     
+    //This method spawns mobs into the map.
     public void mobSpawner() {
-        if(spawnFrame >= spawnTime) {
+        if(spawnFrame >= spawnTime) { // This acts as a timer so that mobs don't all spawn at once.
             for(int i = 0; i < mobs.length; i++) {
                 if(!mobs[i].inGame) {
-                    mobs[i].spawnMob(Value.mobBee);
+                    mobs[i].spawnMob(Value.mobBee);// Spawns the Bee mob.
                     break;
                 }
             }
@@ -143,10 +150,11 @@ public class Canvas extends JPanel implements Runnable {
         }
     }
 
+    //This method runs the game loop and determines what happens every second that the game is running.
     @Override
     public void run() {
         while(true){
-            if(!isFirst && health > 0 && !hasWon) {
+            if(!isFirst && health > 0 && !hasWon) { // If the player has not lost or won then the loop will run as normal.
                 room.physics();
                 mobSpawner();
                 for(int i = 0; i < mobs.length; i++) {
@@ -155,7 +163,7 @@ public class Canvas extends JPanel implements Runnable {
                     }
                 }
             } else {
-                if(hasWon) {
+                if(hasWon) { // If the player has won then the loop will load the next level or exit the game if the player is on the last level.
                     if(winFrame >= winTime) {
                         if(level == maxLevel) {
                             System.exit(0);
@@ -172,8 +180,9 @@ public class Canvas extends JPanel implements Runnable {
                 }
             }
             
+            
             repaint();
-            try {
+            try { // This is how often the game loop is updated.
                 gameLoop.sleep(1);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Canvas.class.getName()).log(Level.SEVERE, null, ex);

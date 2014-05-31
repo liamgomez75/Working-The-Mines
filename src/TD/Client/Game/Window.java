@@ -17,7 +17,7 @@ public class Window extends JFrame {
     
     
     
-    
+    //The constructor sets the title, size , exit operation, and the location of the window.
     public Window() {
         setTitle(title);
         setSize(size);
@@ -27,6 +27,7 @@ public class Window extends JFrame {
         init();
     }
     
+    //This method initializes the grid in the window and the canvas.
     public void init() {
         setLayout(new GridLayout(1,1,0,0));
             Canvas canvas = new Canvas(this);
@@ -37,6 +38,7 @@ public class Window extends JFrame {
         
     }
     
+    //This method creates a window and starts the game.
     public static void main(String[] args) {
         Window window = new Window();
         

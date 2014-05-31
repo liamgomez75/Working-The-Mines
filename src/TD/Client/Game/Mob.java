@@ -146,7 +146,7 @@ public class Mob extends Rectangle {
                     }
                 } else if (direction == left) {
                     if (Canvas.room.block[yCoord][xCoord - 1].groundID != Value.groundRoad) {
-                        return false;
+                        return false;// Returns false is the block next to him is not of groundRoad.
                     }
                 }
             } catch (Exception e) {}
@@ -154,6 +154,7 @@ public class Mob extends Rectangle {
         return true;
     }
 
+    //This method is used to turn the mob counter clockwise based on the direction he is moving..
     private void turnClockwise() {
         if (direction == upward) {
             direction = right;
@@ -166,11 +167,13 @@ public class Mob extends Rectangle {
         }
     }
     
+    //This method is used to handle damage taken by the mob.
     public void takeDamage(int amount) {
         health -= amount;
         checkDeath();
     }
     
+    //This method is used to check if the mob is dead or not.
     public void checkDeath() {
         if(health <=0) {
             deleteSelf();
@@ -178,6 +181,7 @@ public class Mob extends Rectangle {
             
     }
     
+    //This method is used to check whether or not if the mob is alive and in the game or not.
     public boolean isDead() {
         if(inGame) {
             return false;
@@ -186,16 +190,19 @@ public class Mob extends Rectangle {
         }
     }
 
+    //This method is used to draw all of the graphics for the mob.
     public void draw(Graphics g) {
         g.drawImage(Canvas.tileset_mob[mobID], x, y, width, height, null);
         
-        //health bar
+        //This is the red background of the healthbar.
         g.setColor(new Color(200,50,50));
         g.fillRect(x, y - (healthSpace + healthHeight), width, healthHeight);
 
+        //This is the top green layer of the health bar.
         g.setColor(new Color(50,180,50));
         g.fillRect(x, y - (healthSpace + healthHeight), health, healthHeight);
         
+        //This is the black outline surrounding the health bar.
         g.setColor(new Color(0,0,0));
         g.drawRect(x, y - (healthSpace + healthHeight), health-1, healthHeight-1);
     }

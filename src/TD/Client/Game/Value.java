@@ -9,6 +9,8 @@ package TD.Client.Game;
  * @author Liam Gomez <liamgomez75@gmail.com>
  */
 public class Value {
+    
+    //Initializes all the values and IDs used in the game.
     public static int groundGrass = 0;
     public static int groundRoad = 1;
     

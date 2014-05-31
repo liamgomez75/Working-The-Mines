@@ -14,12 +14,12 @@ import java.awt.*;
 public class KeyHandler implements MouseMotionListener, MouseListener {
 
     @Override
-    public void mouseDragged(MouseEvent e) {
+    public void mouseDragged(MouseEvent e) { // This method is used to get the position of the mouse at all times.
         Canvas.mse = new Point((e.getX()) + ((Window.size.width - Canvas.myWidth)/2), (e.getY()) + ((Window.size.height - (Canvas.myHeight)) - (Window.size.width - Canvas.myWidth)/2));
     }
 
     @Override
-    public void mouseMoved(MouseEvent e) {
+    public void mouseMoved(MouseEvent e) { // This method is used to get the position of the mouse at all times.
         Canvas.mse = new Point((e.getX()) - ((Window.size.width - Canvas.myWidth)/2), (e.getY()) - ((Window.size.height - (Canvas.myHeight)) - (Window.size.width - Canvas.myWidth)/2));
     }
 
@@ -29,7 +29,7 @@ public class KeyHandler implements MouseMotionListener, MouseListener {
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent e) { // Checks if the player has clicked on a button and returns the clicked button.
         Canvas.store.click(e.getButton());
     }
 
