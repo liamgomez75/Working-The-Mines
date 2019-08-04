@@ -11,7 +11,7 @@ import java.awt.*;
 
 public class Window extends JFrame {
 
-    public static String title = "Nicholas Cage Defender";
+    public static String title = "Working The Mines";
     public static Dimension size = new Dimension(640, 620);
     public static boolean gameStarted =false;
     

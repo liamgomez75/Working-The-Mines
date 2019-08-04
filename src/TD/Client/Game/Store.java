@@ -24,9 +24,9 @@ public class Store {
     public static int iconYSpace = 13;
     public static int heldID = -1;
     public static int realID = -1;
-    public static int[] buttonID = {Value.airTowerLaser,Value.airAir,Value.airAir,Value.airAir,Value.airAir,Value.airAir,Value.airAir,Value.airTrash};
+    public static int[] buttonID = {Value.airTowerLaser,Value.airDrill,Value.airAir,Value.airAir,Value.airAir,Value.airAir,Value.airAir,Value.airTrash};
     public static int itemBorder = 4;
-    public static int[] buttonPrice = {10,0,0,0,0,0,0,0};
+    public static int[] buttonPrice = {10,100,0,0,0,0,0,0};
     
     public static boolean holdingItem = false;
     
@@ -104,6 +104,7 @@ public class Store {
         g.setColor(new Color(255, 255, 255));
         g.drawString("" + Canvas.health, buttonHealth.x + buttonHealth.width + iconSpace, buttonHealth.y + iconYSpace);
         g.drawString("" + Canvas.coinAmount, buttonMoney.x + buttonMoney.width + iconSpace, buttonMoney.y + iconYSpace);
+        g.drawString("Ores Left: " + Canvas.ores, (buttonMoney.x + buttonMoney.width + iconSpace)*6, buttonMoney.y + iconYSpace);
         
         //Draws the item that the player is holding.
         if(holdingItem) {

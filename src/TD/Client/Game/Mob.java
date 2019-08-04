@@ -35,7 +35,15 @@ public class Mob extends Rectangle {
             }
         }
         this.mobID = mobID;
-        this.health = mobSize;// The health is based on how many pixels there are in the width of the mob's image.
+        if(this.mobID == Value.mobCoal) {
+            this.health = mobSize * 2;
+        }
+        else if (this.mobID == Value.mobIron) {
+            this.health = mobSize * 5;
+        }
+        else {
+            this.health = mobSize;// The health is based on how many pixels there are in the width of the mob's image.
+        }
         inGame = true;
         
     }
@@ -166,6 +174,7 @@ public class Mob extends Rectangle {
             direction = upward;
         }
     }
+
     
     //This method is used to handle damage taken by the mob.
     public void takeDamage(int amount) {
@@ -176,6 +185,9 @@ public class Mob extends Rectangle {
     //This method is used to check if the mob is dead or not.
     public void checkDeath() {
         if(health <=0) {
+            Canvas.kills += 1;
+            Canvas.ores -= 1;
+            Canvas.hasWon();
             deleteSelf();
         }
             

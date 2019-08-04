@@ -11,6 +11,7 @@ import java.awt.image.*;
 import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Random;
 import javax.swing.*;
         
 public class Canvas extends JPanel implements Runnable {
@@ -18,8 +19,9 @@ public class Canvas extends JPanel implements Runnable {
     public Thread gameLoop = new Thread(this);
     public static int myWidth, myHeight;
     public static int coinAmount = 10;
-    public static int health = 3;
-    public static int kills = 0, killsToWin = 0, level = 1, maxLevel = 3;
+    public static int health = 1;
+    public static int kills = 0, killsToWin = 0, level = 1, maxLevel = 3, difficulty = 1, coalBound = 30;
+    public static int ores = 100;
     public static boolean isFirst = true;
     public static Room room;
     public static Image[] tileset_ground = new Image[100];
@@ -49,10 +51,25 @@ public class Canvas extends JPanel implements Runnable {
         if(kills >= killsToWin) {
             hasWon = true;
             kills = 0;
+            ores = 100;
             coinAmount = 10;
-            health = 3;
+            health = 1;
+            difficulty = 1;
+            coalBound = 30;
         } else {
             hasWon = false;
+            if (ores <= 75 && ores > 50) {
+                difficulty = 2;
+                coalBound = 50;
+            }
+            else if (ores <= 50 && ores > 25) {
+                difficulty = 3;
+                coalBound = 75;
+            }
+            else if (ores <= 25) {
+                difficulty = 4;
+                coalBound = 100;
+            }
         }
     }
     
@@ -76,7 +93,9 @@ public class Canvas extends JPanel implements Runnable {
         tileset_res[0] = new ImageIcon("res/cell.png").getImage();
         tileset_res[1] = new ImageIcon("res/heart.png").getImage();
         tileset_res[2] = new ImageIcon("res/coin.png").getImage();
-        tileset_mob[0] = new ImageIcon("res/mob.png").getImage();
+        tileset_mob[0] = new ImageIcon("res/goldore.png").getImage();
+        tileset_mob[1] = new ImageIcon("res/coalore.png").getImage();
+        tileset_mob[2] = new ImageIcon("res/ironore.png").getImage();
         
         save.loadSave(new File("save/mission" + level + ".sav")); // Loads the level from the save file.
         
@@ -127,7 +146,7 @@ public class Canvas extends JPanel implements Runnable {
             if(level == maxLevel) {
                 g.drawString("YOU WIN!",getWidth()/2 ,getHeight()/2 ); // Draws the win screen if there are no additional levels.
             } else {
-                g.drawString("LOADING NEXT LEVEL...",getWidth()/2 ,getHeight()/2 ); // Draws the loading screen if there is another level.
+                g.drawString("LOADING NEXT LEVEL...",getWidth()/2 - 80 ,getHeight()/2 ); // Draws the loading screen if there is another level.
             }
         }
     }
@@ -136,10 +155,21 @@ public class Canvas extends JPanel implements Runnable {
     
     //This method spawns mobs into the map.
     public void mobSpawner() {
+        Random random = new Random();
+        int num = 1;
         if(spawnFrame >= spawnTime) { // This acts as a timer so that mobs don't all spawn at once.
             for(int i = 0; i < mobs.length; i++) {
                 if(!mobs[i].inGame) {
-                    mobs[i].spawnMob(Value.mobBee);// Spawns the Bee mob.
+                    num = random.nextInt(100) + 1;
+                    if (num <= 10 * difficulty) {
+                        mobs[i].spawnMob(Value.mobIron);
+                    }
+                    else if (num > 10 * difficulty && num <= coalBound) {
+                        mobs[i].spawnMob(Value.mobCoal);
+                    }
+                    else {
+                        mobs[i].spawnMob(Value.mobGold);// Spawns the Gold ore.
+                    }
                     break;
                 }
             }
@@ -147,6 +177,15 @@ public class Canvas extends JPanel implements Runnable {
             spawnFrame = 0;
         } else {
             spawnFrame+= 1;
+        }
+    }
+
+    public static void click (int mouseButton) {
+        if (mouseButton == 1) {
+            for (int i = 0; i < mobs.length; i++)
+            if(mobs[i].contains(Canvas.mse) && mobs[i].inGame) {
+                mobs[i].takeDamage(1);
+            }
         }
     }
 

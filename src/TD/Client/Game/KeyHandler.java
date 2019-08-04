@@ -25,12 +25,13 @@ public class KeyHandler implements MouseMotionListener, MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        
+
     }
 
     @Override
     public void mousePressed(MouseEvent e) { // Checks if the player has clicked on a button and returns the clicked button.
         Canvas.store.click(e.getButton());
+        Canvas.click(e.getButton());
     }
 
     @Override

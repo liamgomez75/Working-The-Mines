@@ -25,6 +25,9 @@ public class Block  extends Rectangle {
         towerRange = new Rectangle(x - (towerRangeSize/2),y-(towerRangeSize/2),width + towerRangeSize,height + towerRangeSize);//creates a rectangle in which the tower can fire within.
         this.groundID = groundID;// Sets the ID of the block.
         this.airID = airID;
+        if(airID == Value.airDrill) {
+            towerRange = new Rectangle(x - (towerRangeSize/2),y-(towerRangeSize/2),width + towerRangeSize*2,height + towerRangeSize*2);
+        }
     }
     
     //This method handles all of the combat physics for blocks with towers.
@@ -36,7 +39,7 @@ public class Block  extends Rectangle {
         }
         //Tells the tower to fire if a mob has entered its range.
         if(!firing) {
-            if(airID == Value.airTowerLaser) {
+            if(airID == Value.airTowerLaser || airID == Value.airDrill) {
                 for(int i = 0;i<Canvas.mobs.length;i++) {
                     if(Canvas.mobs[i].inGame) {
                         if(towerRange.intersects(Canvas.mobs[i])) {
@@ -51,8 +54,14 @@ public class Block  extends Rectangle {
         if(firing) {
             //Tells the mob to lose health if he is shot by the tower.
             if(loseFrame >= loseTime) {
-                Canvas.mobs[shotMob].takeDamage(1);
-                loseFrame = 0;
+                if(airID == 2){
+                    Canvas.mobs[shotMob].takeDamage(2);
+                    loseFrame = 0;
+                }
+                else {
+                    Canvas.mobs[shotMob].takeDamage(1);
+                    loseFrame = 0;
+                }
             } else {
                 loseFrame += 1;
             }
@@ -60,9 +69,6 @@ public class Block  extends Rectangle {
             if(Canvas.mobs[shotMob].isDead()) { // Handles the death of a mob.
                 firing = false;
                 shotMob = -1;
-                Canvas.kills += 1;
-                Canvas.hasWon();
-                
             }
         }
          
